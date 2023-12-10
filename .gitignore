@@ -50,3 +50,22 @@ m4/lt~obsolete.m4
 # can automatically generate from config.status script
 # (which is called by configure script))
 Makefile
+
+/*.iml
+/*.ipr
+/*.iws
+/.classpath
+/.factorypath
+/.idea
+/.project
+/.settings
+/nb*
+/release.properties
+/target
+
+# These are needed if running in IDE without properties set
+/ibderby
+derby.log
+/bin/
+.mvn/wrapper/maven-wrapper.jar
+
