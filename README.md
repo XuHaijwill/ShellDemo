@@ -40,7 +40,149 @@
 >
 > [root@192 ~]# ss -an | grep 3306
 > tcp    LISTEN     0      128       *:3306                  *:*                  
-> tcp    LISTEN     0      128    [::]:3306               [::]:*  
+> tcp    LISTEN     0      128    [::]:3306               [::]:*  ping命令
 >
-> 
+> [root@192 ~]# ping -c1 www.baidu.com &> /dev/null && echo "www.baidu.com is up" || echo "www.baidu.com is down" 
+> www.baidu.com is up
+> [root@192 ~]# ping -c1 www.baidu.com  && echo "www.baidu.com is up" || echo "www.baidu.com is down" 
+> PING www.baidu.com (120.232.145.144) 56(84) bytes of data.
+> 64 bytes from 120.232.145.144 (120.232.145.144): icmp_seq=1 ttl=128 time=11.7 ms
+>
+> --- www.baidu.com ping statistics ---
+> 1 packets transmitted, 1 received, 0% packet loss, time 0ms
+> rtt min/avg/max/mdev = 11.742/11.742/11.742/0.000 ms
+> www.baidu.com is up
+>
+> [root@192 ~]# /usr/bin/python <<-EOF
+> > print "hello world!"
+> > print "2222"
+> > print "3333"
+> > EOF
+> > hello world!
+> > 2222
+> > 3333
 
+### shell中调用python
+
+![image-20231210212014164](docs\imgs\image-20231210212014164.png)
+
+> rpm -qc bash
+
+![image-20231210214022971](docs\imgs\image-20231210213351715.png)
+
+> 查询作业
+>
+> jobs
+
+> 1. 命令和文件自动补齐
+>
+> 2. 命令历史记忆功能 上下键、!number、!string、!$、!!、^R
+>
+> 3. 别名功能 alias、unalias cp、~username/.bashrc、\cp -rf /etc/hosts .
+>
+> 4. 快捷键 ^R、^D、^A、^E、^L、^U、^K、^Y、^S、^Q
+>
+> 5. 前后台作业控制 &、nohup、^C、^Z、bg %1、fg %1、kill %3、screen
+>
+> 6. 输入输出重定向 0,1,2 > >> 2>（错误输出） 2>>（错误输出追加） 2>&1（2到1） &> cat < /etc/hosts cat <<EOF cat >file1 <<EOF
+
+
+
+> ## 管道 | tee
+>
+> ip addr |grep 'inet ' |grep eth0
+>
+> ip addr |grep 'inet ' |tee test |grep eth0 覆盖
+>
+> ip addr |grep 'inet ' |tee -a test |grep eth0 -a 追加
+>
+> df |grep '/$'
+>
+> df |tee df.txt |grep '/$'
+>
+> [root@tianyun ~]# date > date.txt
+>
+> [root@tianyun ~]# date |tee date.txt
+>
+> Fri Aug 25 15:30:20 CST 2017
+>
+> ## 命令排序
+>
+> ; 不具备逻辑判断
+>
+> cd; eject 
+>
+> && || 具备逻辑判断
+>
+> ./configure && make && make install （命令返回值 echo $?）
+>
+> mkdir /var/111/222/333 && echo ok
+>
+> mkdir -p /var/111/222/333 && echo ok
+>
+> ls /home/111/222/333/444 || mkdir -p /home/111/222/333/444
+>
+> [ -d /home/111/222/333/444 ] || mkdir -p /home/111/222/333/444
+>
+> ping -c1 10.18.42.1 &>/dev/null && echo up || echo down
+>
+> ============================================================
+>
+> 注意：
+>
+> command & 后台执行
+>
+> command &>/dev/null 混合重定向（标准输出 1，错误输出 2）
+>
+> command1 && command2 命令排序，逻辑判断
+>
+> ============================================================
+
+> ## shell 通配符（元字符）表示的不是本意
+>
+> \* 匹配任意多个字符 ls in* rm -rf * rm -rf *.pdf find / -iname "*-eth0"
+>
+> ? 匹配任意一个字符 touch love loove live l7ve; ll l?ve
+>
+> [] 匹配括号中任意一个字符 [abc] [a-z] [0-9] [a-zA-Z0-9] [ ^a-zA-Z0-9] ll l[io]ve ll l[ ^a-z]ve ll /dev/sd[a-z]
+>
+> () 在子 shell 中执行(cd /boot;ls) (umask 077; touch file1000)
+>
+> {} 集合 touch file{1..9} 
+>
+> \# mkdir /home/{111,222} mkdir -pv /home/{333/{aaa,bbb},444}
+>
+> \# cp -rv /etc/sysconfig/network-scripts/ifcfg-eth0 /etc/sysconfig/network-scripts/ifcfg-eth0.old
+>
+> \# cp -rv /etc/sysconfig/network-scripts/{ifcfg-eth0,ifcfg-eth0.old}
+>
+> \# cp -rv /etc/sysconfig/network-scripts/ifcfg-eth0{,.old}\ 转义符，让元字符回归本意
+>
+> \# echo * 
+>
+> \# echo \*
+>
+> \# touch yang\sheng
+>
+> mkdir \\
+>
+> echo -e "atb"
+>
+> echo -e "a\tb"
+>
+> echo -e "anb" 
+>
+> echo -e "a\nb" 
+>
+> ## echo 输出带颜色文本
+>
+> echo --help
+>
+> ![image-20231211093753379](docs\imgs\image-20231211093753379.png)
+>
+> ## printf 格式化输出文本
+
+## Refrence
+
+> - linux shell 脚本 入门到实战详解 https://blog.csdn.net/weixin_42313749/article/details/120524768
+> - 【千锋教育Linux高级程序设计】笔记+视频+源码，全部免费！ https://zhuanlan.zhihu.com/p/638482652
