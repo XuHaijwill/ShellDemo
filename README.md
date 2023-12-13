@@ -100,9 +100,9 @@
 >
 > df |tee df.txt |grep '/$'
 >
-> [root@tianyun ~]# date > date.txt
+> [root@test~]# date > date.txt
 >
-> [root@tianyun ~]# date |tee date.txt
+> [root@test~]# date |tee date.txt
 >
 > Fri Aug 25 15:30:20 CST 2017
 >
@@ -314,15 +314,131 @@
 
 ### 变量的赋值方式：
 
+> 1. 显式赋值
+>
+> 变量名=变量值
+>
+> 示例：
+>
+> ip1=192.168.1.251
+>
+> school="BeiJing 1000phone"today1=`date +%F`
+>
+> today2=$(date +%F)
 
+> 2. read 从键盘读入变量值
+>
+> read 变量名
+>
+> read -p "提示信息: " 变量名
+>
+> read -t 5 -p "提示信息: " 变量名
+>
+> read -n 2 变量名
+
+> 示例 3：
+>
+> \# vim first.sh
+>
+> back_dir1=/var/backup
+>
+> read -p "请输入你的备份目录: " back_dir2
+>
+> echo $back_dir1
+>
+> echo $back_dir2
+>
+> \# sh first.sh
+>
+> 示例 4：
+>
+> \# vim ping2.sh
+>
+> \#!/bin/bash 
+>
+> read -p "Input IP: " ip 
+>
+> ping -c2 $ip &>/dev/null 
+>
+> if [ $? = 0 ];then 
+>
+> echo "host $ip is ok" 
+>
+> else 
+>
+> echo "host $ip is fail" 
+>
+> fi 
+>
+> \# chmod a+x ping2.sh
+>
+> \# ./ping.sh
+>
+> 定义或引用变量时注意事项：
+>
+> " " 弱引用
+>
+> ' ' 强引用
+>
+> [root@test~]# school=1000phone
+>
+> [root@test~]# echo "${school} is good"
+>
+> 1000phone is good
+>
+> [root@test~]# echo '${school} is good'
+>
+> ${school} is good
+>
+> ` ` 命令替换 等价于 $() 反引号中的 shell 命令会被先执行
+>
+> [root@test~]# touch `date +%F`_file1.txt 
+>
+> [root@test~]# touch $(date +%F)_file2.txt 
+>
+> [root@test~]# disk_free3="df -Ph |grep '/$' |awk '{print $4}'" 错误
+>
+> [root@test~]# disk_free4=$(df -Ph |grep '/$' |awk '{print $4}')
+>
+> [root@test~]# disk_free5=`df -Ph |grep '/$' |awk '{print $4}'`
 
 > ![image-20231213090211531](docs\imgs\image-20231213090211531.png)
 
-
-
-### 变量的定义方式
-
 ### 变量的运算
+
+> 1. 整数运算
+>
+> 方法一：expr
+>
+> expr 1 + 2
+>
+> expr $num1 + $num2 + - \* / %
+
+> 方法二：$(())
+>
+> echo $(($num1+$num2)) + - * / %
+>
+> echo $((num1+num2))
+>
+> echo $((5-3*2)) 
+>
+> echo $(((5-3)*2))
+>
+> echo $((2**3))
+>
+> sum=$((1+2)); echo $sum
+
+> 方法三：$[]
+>
+> echo $[5+2] + - * / %
+>
+> echo $[5**2]
+
+> 方法四：let
+>
+> let sum=2+3; echo $sum
+>
+> let i++; echo $
 
 ### 变量"内容"的删除和替换
 
@@ -336,3 +452,5 @@
 
 > - linux shell 脚本 入门到实战详解 https://blog.csdn.net/weixin_42313749/article/details/120524768
 > - 【千锋教育Linux高级程序设计】笔记+视频+源码，全部免费！ https://zhuanlan.zhihu.com/p/638482652
+> - https://www.bilibili.com/video/BV1Zb411N74b/
+> - 微信打开小程序：http://navo.top/3emE3i
